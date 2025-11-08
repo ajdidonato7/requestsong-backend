@@ -1,5 +1,5 @@
 from datetime import timedelta
-from fastapi import APIRouter, HTTPException, status, Depends, Response
+from fastapi import APIRouter, HTTPException, status, Depends
 from fastapi.security import OAuth2PasswordRequestForm
 from app.database import get_database
 from app.models.artist import Artist, ArtistCreate, ArtistPublic, Token
@@ -11,44 +11,25 @@ from app.auth import (
 )
 from app.config import settings
 
-def add_cors_headers(response: Response):
-    """Add CORS headers to response"""
-    response.headers["Access-Control-Allow-Origin"] = "https://requestsong-frontend.vercel.app"
-    response.headers["Access-Control-Allow-Methods"] = "GET, POST, PUT, DELETE, OPTIONS"
-    response.headers["Access-Control-Allow-Headers"] = "Content-Type, Authorization"
-    response.headers["Access-Control-Allow-Credentials"] = "true"
-    return response
-
 router = APIRouter(prefix="/api/auth", tags=["authentication"])
 
 @router.post("/register", response_model=ArtistPublic)
-async def register_artist(response: Response, artist_data: ArtistCreate):
+async def register_artist(artist_data: ArtistCreate):
     """Register a new artist"""
-    # Add CORS headers
-    add_cors_headers(response)
-    
     db = get_database()
     
     # Check if username already exists
     if db.artists.find_one({"username": artist_data.username}):
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Username already registered",
-            headers={
-                "Access-Control-Allow-Origin": "https://requestsong-frontend.vercel.app",
-                "Access-Control-Allow-Credentials": "true",
-            }
+            detail="Username already registered"
         )
     
     # Check if email already exists
     if db.artists.find_one({"email": artist_data.email}):
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Email already registered",
-            headers={
-                "Access-Control-Allow-Origin": "https://requestsong-frontend.vercel.app",
-                "Access-Control-Allow-Credentials": "true",
-            }
+            detail="Email already registered"
         )
     
     # Create new artist
@@ -74,29 +55,18 @@ async def register_artist(response: Response, artist_data: ArtistCreate):
     
     raise HTTPException(
         status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-        detail="Failed to create artist",
-        headers={
-            "Access-Control-Allow-Origin": "https://requestsong-frontend.vercel.app",
-            "Access-Control-Allow-Credentials": "true",
-        }
+        detail="Failed to create artist"
     )
 
 @router.post("/login", response_model=Token)
-async def login_artist(response: Response, form_data: OAuth2PasswordRequestForm = Depends()):
+async def login_artist(form_data: OAuth2PasswordRequestForm = Depends()):
     """Login artist and return access token"""
-    # Add CORS headers
-    add_cors_headers(response)
-    
     artist = await authenticate_artist(form_data.username, form_data.password)
     if not artist:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Incorrect username or password",
-            headers={
-                "WWW-Authenticate": "Bearer",
-                "Access-Control-Allow-Origin": "https://requestsong-frontend.vercel.app",
-                "Access-Control-Allow-Credentials": "true",
-            },
+            headers={"WWW-Authenticate": "Bearer"},
         )
     
     access_token_expires = timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES)
@@ -107,11 +77,8 @@ async def login_artist(response: Response, form_data: OAuth2PasswordRequestForm 
     return {"access_token": access_token, "token_type": "bearer"}
 
 @router.get("/me", response_model=ArtistPublic)
-async def read_current_artist(response: Response, current_artist: Artist = Depends(get_current_active_artist)):
+async def read_current_artist(current_artist: Artist = Depends(get_current_active_artist)):
     """Get current authenticated artist"""
-    # Add CORS headers
-    add_cors_headers(response)
-    
     return ArtistPublic(
         username=current_artist.username,
         display_name=current_artist.display_name,
