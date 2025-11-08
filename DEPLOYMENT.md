@@ -109,10 +109,15 @@ flyctl scale count 2     # Run 2 instances
 ### Common Issues
 1. **Database connection errors**: Verify your MongoDB Atlas connection string and IP whitelist
 2. **CORS errors**:
-   - Ensure your frontend domain is explicitly listed in `backend/app/main.py`
-   - Redeploy backend after adding new domains
+   - The backend includes both FastAPI CORS middleware and Vercel headers configuration
+   - If issues persist, the `vercel.json` file includes explicit CORS headers
+   - Redeploy backend after making CORS changes
    - Check that the frontend URL matches exactly (including https://)
 3. **Build failures**: Check that all dependencies are properly specified in requirements.txt
+4. **Vercel-specific issues**:
+   - Ensure `vercel.json` is in the backend root directory
+   - Check Vercel function logs for deployment errors
+   - Verify the Python runtime is correctly configured
 
 ### Useful Commands
 ```bash
