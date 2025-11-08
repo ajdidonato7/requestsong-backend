@@ -22,6 +22,16 @@ class Settings:
         "https://*.onrender.com",   # Allow Render domains
     ]
     
+    @property
+    def cors_origins(self):
+        """Get CORS origins with wildcard support"""
+        origins = self.ALLOWED_ORIGINS.copy()
+        # Add specific frontend URL if deployed
+        frontend_url = os.getenv("FRONTEND_URL")
+        if frontend_url:
+            origins.append(frontend_url)
+        return origins
+    
     # Production settings
     ENVIRONMENT: str = os.getenv("ENVIRONMENT", "development")
     
