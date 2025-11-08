@@ -17,7 +17,8 @@ class Settings:
     ALLOWED_ORIGINS: list = [
         "http://localhost:3000",
         "http://127.0.0.1:3000",
-        "https://*.vercel.app",     # Allow Vercel domains
+        "https://requestsong-frontend.vercel.app",  # Your specific frontend URL
+        "https://*.vercel.app",     # Allow Vercel domains (wildcard)
         "https://*.fly.dev",        # Allow Fly.io domains
         "https://*.onrender.com",   # Allow Render domains
     ]

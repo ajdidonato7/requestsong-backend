@@ -82,8 +82,10 @@ All API endpoints are prefixed with `/api`:
 ### CORS Configuration
 The backend is configured to allow requests from:
 - `http://localhost:3000` (local development)
-- `https://*.vercel.app` (Vercel deployments)
-- `https://*.fly.dev` (Fly.io deployments)
+- `https://requestsong-frontend.vercel.app` (your specific frontend)
+- Additional domains can be added in `backend/app/main.py`
+
+**Important**: After updating CORS settings, redeploy your backend for changes to take effect.
 
 ### Scaling
 The app is configured with:
@@ -106,7 +108,10 @@ flyctl scale count 2     # Run 2 instances
 
 ### Common Issues
 1. **Database connection errors**: Verify your MongoDB Atlas connection string and IP whitelist
-2. **CORS errors**: Ensure your frontend domain is in the ALLOWED_ORIGINS list
+2. **CORS errors**:
+   - Ensure your frontend domain is explicitly listed in `backend/app/main.py`
+   - Redeploy backend after adding new domains
+   - Check that the frontend URL matches exactly (including https://)
 3. **Build failures**: Check that all dependencies are properly specified in requirements.txt
 
 ### Useful Commands
