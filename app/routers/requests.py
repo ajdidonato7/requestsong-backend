@@ -7,7 +7,7 @@ from app.models.request import Request, RequestCreate, RequestUpdate, RequestPub
 from app.models.artist import Artist
 from app.auth import get_current_active_artist
 
-router = APIRouter(prefix="/api/requests", tags=["requests"])
+router = APIRouter(prefix="/requests", tags=["requests"])
 
 @router.post("/", response_model=RequestPublic)
 async def create_request(request_data: RequestCreate):

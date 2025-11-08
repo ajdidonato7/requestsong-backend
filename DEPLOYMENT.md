@@ -44,6 +44,39 @@ flyctl secrets set SECRET_KEY="your-super-secret-key-change-this-to-something-ve
 flyctl secrets set ENVIRONMENT="production"
 ```
 
+## Render Environment Variables Setup
+
+**CRITICAL**: You must set these environment variables in your Render dashboard:
+
+### Required Environment Variables:
+1. **`MONGODB_URL`**: Your MongoDB Atlas connection string
+   - Example: `mongodb+srv://username:password@cluster.mongodb.net/requestr?retryWrites=true&w=majority`
+   - **This is REQUIRED** - without it, the app tries to connect to localhost:27017
+
+2. **`SECRET_KEY`**: A secure secret key for JWT tokens
+   - Example: `your-super-secret-key-change-this-to-something-very-long-and-random`
+
+3. **`ENVIRONMENT`**: Set to `production`
+
+4. **`DATABASE_NAME`**: Set to `requestr` (optional, defaults to "requestr")
+
+### How to Set Environment Variables in Render:
+1. Go to your Render service dashboard
+2. Click on "Environment" tab
+3. Add each environment variable:
+   - Key: `MONGODB_URL`
+   - Value: Your MongoDB Atlas connection string
+4. Click "Save Changes"
+5. Redeploy the service
+
+### MongoDB Atlas Setup:
+1. Create a MongoDB Atlas account (free tier available)
+2. Create a new cluster
+3. Create a database user with read/write permissions
+4. Get your connection string from "Connect" → "Connect your application"
+5. Replace `<password>` with your actual password
+6. Replace `<dbname>` with `requestr`
+
 ### 6. Deploy the backend
 ```bash
 flyctl deploy

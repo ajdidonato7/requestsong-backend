@@ -2,7 +2,7 @@ from fastapi import APIRouter, HTTPException, status
 from app.database import get_database
 from app.models.artist import ArtistPublic
 
-router = APIRouter(prefix="/api/artists", tags=["artists"])
+router = APIRouter(prefix="/artists", tags=["artists"])
 
 @router.get("/{username}", response_model=ArtistPublic)
 async def get_artist_profile(username: str):

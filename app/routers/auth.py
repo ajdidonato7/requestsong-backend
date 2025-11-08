@@ -11,7 +11,7 @@ from app.auth import (
 )
 from app.config import settings
 
-router = APIRouter(prefix="/api/auth", tags=["authentication"])
+router = APIRouter(prefix="/auth", tags=["authentication"])
 
 @router.post("/register", response_model=ArtistPublic)
 async def register_artist(artist_data: ArtistCreate):
