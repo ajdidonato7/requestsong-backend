@@ -20,11 +20,15 @@ app = FastAPI(
     lifespan=lifespan
 )
 
-# Configure CORS - More permissive for Vercel deployment
+# Configure CORS
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # Allow all origins for now
-    allow_credentials=False,  # Set to False when using allow_origins=["*"]
+    allow_origins=[
+        "http://localhost:3000",
+        "http://127.0.0.1:3000",
+        "https://requestsong-frontend.vercel.app",
+    ],
+    allow_credentials=True,
     allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     allow_headers=["*"],
 )
