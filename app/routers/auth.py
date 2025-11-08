@@ -1,5 +1,5 @@
 from datetime import timedelta
-from fastapi import APIRouter, HTTPException, status, Depends
+from fastapi import APIRouter, HTTPException, status, Depends, Response
 from fastapi.security import OAuth2PasswordRequestForm
 from app.database import get_database
 from app.models.artist import Artist, ArtistCreate, ArtistPublic, Token
@@ -11,11 +11,21 @@ from app.auth import (
 )
 from app.config import settings
 
+def add_cors_headers(response: Response):
+    """Add CORS headers to response"""
+    response.headers["Access-Control-Allow-Origin"] = "https://requestsong-frontend.vercel.app"
+    response.headers["Access-Control-Allow-Methods"] = "GET, POST, PUT, DELETE, OPTIONS"
+    response.headers["Access-Control-Allow-Headers"] = "Content-Type, Authorization"
+    response.headers["Access-Control-Allow-Credentials"] = "true"
+
 router = APIRouter(prefix="/auth", tags=["authentication"])
 
 @router.post("/register", response_model=ArtistPublic)
-async def register_artist(artist_data: ArtistCreate):
+async def register_artist(artist_data: ArtistCreate, response: Response):
     """Register a new artist"""
+    # Add CORS headers
+    add_cors_headers(response)
+    
     db = get_database()
     
     # Check if username already exists
@@ -59,8 +69,11 @@ async def register_artist(artist_data: ArtistCreate):
     )
 
 @router.post("/login", response_model=Token)
-async def login_artist(form_data: OAuth2PasswordRequestForm = Depends()):
+async def login_artist(response: Response, form_data: OAuth2PasswordRequestForm = Depends()):
     """Login artist and return access token"""
+    # Add CORS headers
+    add_cors_headers(response)
+    
     artist = await authenticate_artist(form_data.username, form_data.password)
     if not artist:
         raise HTTPException(
