@@ -22,6 +22,11 @@ class Request(BaseModel):
     queue_position: int = Field(..., ge=1)
     created_at: datetime = Field(default_factory=datetime.utcnow)
     updated_at: datetime = Field(default_factory=datetime.utcnow)
+    # Spotify integration fields
+    spotify_track_id: Optional[str] = Field(None, description="Spotify track ID")
+    spotify_track_url: Optional[str] = Field(None, description="Spotify track URL")
+    album_image_url: Optional[str] = Field(None, description="Album cover image URL")
+    preview_url: Optional[str] = Field(None, description="30-second preview URL")
 
     class Config:
         allow_population_by_field_name = True
@@ -35,6 +40,11 @@ class RequestCreate(BaseModel):
     requester_name: str = Field(..., min_length=1, max_length=100)
     message: Optional[str] = Field(None, max_length=500)
     tip_amount: Optional[float] = Field(None, ge=0)
+    # Spotify integration fields
+    spotify_track_id: Optional[str] = Field(None, description="Spotify track ID")
+    spotify_track_url: Optional[str] = Field(None, description="Spotify track URL")
+    album_image_url: Optional[str] = Field(None, description="Album cover image URL")
+    preview_url: Optional[str] = Field(None, description="30-second preview URL")
 
 class RequestUpdate(BaseModel):
     status: Optional[RequestStatus] = None
@@ -54,6 +64,11 @@ class RequestPublic(BaseModel):
     status: RequestStatus
     queue_position: int
     created_at: datetime
+    # Spotify integration fields
+    spotify_track_id: Optional[str] = None
+    spotify_track_url: Optional[str] = None
+    album_image_url: Optional[str] = None
+    preview_url: Optional[str] = None
 
     class Config:
         json_encoders = {ObjectId: str}

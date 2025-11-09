@@ -37,7 +37,11 @@ async def create_request(request_data: RequestCreate):
         requester_name=request_data.requester_name,
         message=request_data.message,
         tip_amount=request_data.tip_amount,
-        queue_position=next_position
+        queue_position=next_position,
+        spotify_track_id=request_data.spotify_track_id,
+        spotify_track_url=request_data.spotify_track_url,
+        album_image_url=request_data.album_image_url,
+        preview_url=request_data.preview_url
     )
     
     # Insert into database
@@ -53,7 +57,11 @@ async def create_request(request_data: RequestCreate):
             tip_amount=request.tip_amount,
             status=request.status,
             queue_position=request.queue_position,
-            created_at=request.created_at
+            created_at=request.created_at,
+            spotify_track_id=request.spotify_track_id,
+            spotify_track_url=request.spotify_track_url,
+            album_image_url=request.album_image_url,
+            preview_url=request.preview_url
         )
     
     raise HTTPException(
@@ -93,7 +101,11 @@ async def get_artist_requests(artist_username: str, status_filter: str = "pendin
             tip_amount=request_data.get("tip_amount"),
             status=request_data["status"],
             queue_position=request_data["queue_position"],
-            created_at=request_data["created_at"]
+            created_at=request_data["created_at"],
+            spotify_track_id=request_data.get("spotify_track_id"),
+            spotify_track_url=request_data.get("spotify_track_url"),
+            album_image_url=request_data.get("album_image_url"),
+            preview_url=request_data.get("preview_url")
         ))
     
     return requests
@@ -159,7 +171,11 @@ async def update_request(
         tip_amount=updated_request.get("tip_amount"),
         status=updated_request["status"],
         queue_position=updated_request["queue_position"],
-        created_at=updated_request["created_at"]
+        created_at=updated_request["created_at"],
+        spotify_track_id=updated_request.get("spotify_track_id"),
+        spotify_track_url=updated_request.get("spotify_track_url"),
+        album_image_url=updated_request.get("album_image_url"),
+        preview_url=updated_request.get("preview_url")
     )
 
 @router.delete("/{request_id}")
